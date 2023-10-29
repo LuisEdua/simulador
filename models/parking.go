@@ -1,26 +1,47 @@
 package models
 
-import "sync"
+import (
+	"sync"
+)
+
+type Vehiculo struct {
+	ID int
+}
 
 type Estacionamiento struct {
-    Capacidad int
-    Ocupados  int
-    mu        sync.Mutex
+	Capacidad      int
+	Vehiculos      []*Vehiculo
+	Mutex          sync.Mutex
+	Semaforo       chan struct{}
 }
 
-func (e *Estacionamiento) Entrar() bool {
-    e.mu.Lock()
-    defer e.mu.Unlock()
-
-    if e.Ocupados < e.Capacidad {
-        e.Ocupados++
-        return true
-    }
-    return false
+func NuevoEstacionamiento(capacidad int) *Estacionamiento {
+	return &Estacionamiento{
+		Capacidad: capacidad,
+		Semaforo:  make(chan struct{}, capacidad),
+	}
 }
 
-func (e *Estacionamiento) Salir() {
-    e.mu.Lock()
-    e.Ocupados--
-    e.mu.Unlock()
+func (e *Estacionamiento) Entrar(v *Vehiculo) bool {
+	select {
+	case e.Semaforo <- struct{}{}:
+		e.Mutex.Lock()
+		e.Vehiculos = append(e.Vehiculos, v)
+		e.Mutex.Unlock()
+		return true
+	default:
+		return false
+	}
+}
+
+func (e *Estacionamiento) Salir(v *Vehiculo) {
+	for i, vehiculo := range e.Vehiculos {
+		if vehiculo == v {
+			e.Mutex.Lock()
+			e.Vehiculos = append(e.Vehiculos[:i], e.Vehiculos[i+1:]...)
+			e.Mutex.Unlock()
+			<-e.Semaforo
+			return
+		}
+	}
 }

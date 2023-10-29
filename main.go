@@ -1,5 +1,7 @@
 package main
 
-func main() {
+import "Simulador/views"
 
+func main() {
+	views.View()
 }
