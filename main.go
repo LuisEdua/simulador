@@ -1,15 +1,10 @@
 package main
 
 import (
-	"Simulador/views"
-
-	"github.com/faiface/pixel/pixelgl"
+	"Simulador/models"
 )
 
-func run() {
-	views.View()
-}
-
 func main() {
-	pixelgl.Run(run)
+	estacionamiento := models.NewEstacionamiento(20)
+	models.Simular(estacionamiento)
 }
