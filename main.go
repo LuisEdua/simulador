@@ -1,10 +1,7 @@
 package main
 
-import (
-	"Simulador/models"
-)
+import "Simulador/views"
 
 func main() {
-	estacionamiento := models.NewEstacionamiento(20)
-	models.Simular(estacionamiento)
+	views.Show()
 }
