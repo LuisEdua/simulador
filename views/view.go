@@ -53,10 +53,6 @@ func drawParking(win *pixelgl.Window) {
 		imd.Push(p2)
 		imd.Line(1)
 
-		/*imd.Push(p2)
-		imd.Push(p3)
-		imd.Line(1)*/
-
 		imd.Push(p3)
 		imd.Push(p4)
 		imd.Line(1)
@@ -75,10 +71,6 @@ func drawParking(win *pixelgl.Window) {
 		imd.Push(p1)
 		imd.Push(p2)
 		imd.Line(1)
-
-		/*imd.Push(p2)
-		imd.Push(p3)
-		imd.Line(1)*/
 
 		imd.Push(p3)
 		imd.Push(p4)

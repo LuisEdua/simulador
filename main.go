@@ -1,7 +1,11 @@
 package main
 
-import "Simulador/views"
+import (
+	"Simulador/models"
+	"Simulador/views"
+)
 
 func main() {
+	go models.Start()
 	views.Show()
 }
