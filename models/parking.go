@@ -7,6 +7,7 @@ type Parking struct {
 	Mu       sync.Mutex
 	gateFree chan bool
 	slots    []slot
+	Cars     []*Car
 }
 
 func NewParking(c int, mu sync.Mutex, gateFree chan bool) *Parking {
@@ -15,5 +16,6 @@ func NewParking(c int, mu sync.Mutex, gateFree chan bool) *Parking {
 		Mu:       mu,
 		gateFree: gateFree,
 		slots:    generarSlots(),
+		Cars:     make([]*Car, 0),
 	}
 }

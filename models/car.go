@@ -58,5 +58,8 @@ func Out(i int, p *Parking, c *Car) {
 }
 
 func Go(c *Car) {
+	c.P1 = pixel.V(-30, 0)
+	c.P2 = pixel.V(-30, 0)
+	c.Width = 0
 	fmt.Println("El auto ", c.ID, " se ha ido")
 }

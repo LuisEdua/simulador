@@ -1,4 +1,3 @@
-// scenes/scenes.go
 package scenes
 
 import (
@@ -11,51 +10,42 @@ import (
 )
 
 func carRoutine(c *models.Car, p *models.Parking, win *pixelgl.Window) {
-	imd := imdraw.New(nil)
-	imd.Color = colornames.Blue
-
 	p.Mu.Lock()
+	p.Cars = append(p.Cars, c)
+
 	models.Come(c)
-	imd.Push(c.P1)
-	imd.Push(c.P2)
-	imd.Line(c.Width)
-	imd.Draw(win)
+
+	for _, c := range p.Cars {
+		imd := imdraw.New(nil)
+		imd.Color = colornames.Blue
+
+		imd.Push(c.P1)
+		imd.Push(c.P2)
+		imd.Line(c.Width)
+		imd.Draw(win)
+	}
+
 	win.Update()
+
 	if p.Capacity > 0 {
 		p.Capacity--
 		i := models.In(p, c)
-		imd.Clear()
-		imd.Draw(win)
-		imd.Push(c.P1)
-		imd.Push(c.P2)
-		imd.Line(c.Width)
-		imd.Draw(win)
-		win.Update()
 		p.Mu.Unlock()
+
 		time.Sleep(time.Duration(c.T) * time.Second)
+
 		models.Out(i, p, c)
-		imd.Clear()
-		imd.Draw(win)
-		imd.Push(c.P1)
-		imd.Push(c.P2)
-		imd.Line(c.Width)
-		imd.Draw(win)
-		win.Update()
-		p.Mu.Unlock()
+
 		time.Sleep(500 * time.Millisecond)
-		imd.Clear()
-		imd.Draw(win)
-		win.Update()
-		return
+
+		models.Go(c)
 	} else {
 		models.Go(c)
 		p.Mu.Unlock()
-		return
 	}
 }
 
-func Start(win *pixelgl.Window, p *models.Parking, i int) {
+func Run(i int, p *models.Parking, win *pixelgl.Window) {
 	c := models.NewCar(i, pixel.V(40, 180), pixel.V(40, 120))
 	go carRoutine(c, p, win)
-	i++
 }

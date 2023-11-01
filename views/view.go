@@ -15,7 +15,6 @@ func drawParking(win *pixelgl.Window) {
 	imd := imdraw.New(nil)
 	imd.Color = colornames.White
 
-	// Define los puntos para las líneas del cuadro
 	p1 := pixel.V(100, 460)
 	p2 := pixel.V(100, 20)
 	p3 := pixel.V(600, 20)
@@ -113,10 +112,11 @@ func run() {
 
 		drawParking(win)
 
-		go scenes.Start(win, p, i)
-		time.Sleep(500 * time.Millisecond)
+		go scenes.Run(i, p, win)
 
-		win.Update()
+		i++
+
+		time.Sleep(500 * time.Millisecond)
 	}
 }
 
