@@ -20,7 +20,7 @@ func NewCar(id int, p1, p2 pixel.Vec) *Car {
 		P1:    p1,
 		P2:    p2,
 		Width: 30,
-		T:     rand.Intn(5) + 1,
+		T:     rand.Intn(10) + 5,
 	}
 }
 

@@ -108,15 +108,32 @@ func run() {
 	i := 1
 
 	for !win.Closed() {
+
 		win.Clear(colornames.Dimgray)
 
 		drawParking(win)
 
-		go scenes.Run(i, p, win)
+		if i < 101 {
+			go scenes.Run(i, p, win)
+
+		}
+
+		for _, c := range p.Cars {
+			imd := imdraw.New(nil)
+			imd.Color = colornames.Blue
+
+			imd.Push(c.P1)
+			imd.Push(c.P2)
+			imd.Line(c.Width)
+			imd.Draw(win)
+		}
+
+		win.Update()
 
 		i++
 
 		time.Sleep(500 * time.Millisecond)
+
 	}
 }
 
