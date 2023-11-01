@@ -1,10 +1,14 @@
 package views
 
 import (
+	"Simulador/models"
+	"Simulador/scenes"
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/imdraw"
 	"github.com/faiface/pixel/pixelgl"
 	"golang.org/x/image/colornames"
+	"sync"
+	"time"
 )
 
 func drawParking(win *pixelgl.Window) {
@@ -95,11 +99,22 @@ func run() {
 	if err != nil {
 		panic(err)
 	}
+	gateFree := make(chan bool, 1)
+	mu := sync.Mutex{}
+
+	p := models.NewParking(20, mu, gateFree)
+
+	gateFree <- true
+
+	i := 1
 
 	for !win.Closed() {
 		win.Clear(colornames.Dimgray)
 
 		drawParking(win)
+
+		go scenes.Start(win, p, i)
+		time.Sleep(500 * time.Millisecond)
 
 		win.Update()
 	}
